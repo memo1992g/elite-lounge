@@ -1,6 +1,6 @@
 // app/lib/api.js
 export const BASE =
-  process.env.NEXT_PUBLIC_API_BASE?.replace(/\/+$/, "") || "http://elite-lounge.us-east-2.elasticbeanstalk.com";
+  process.env.NEXT_PUBLIC_API_BASE?.replace(/\/+$/, "") || "/api";
 
 // Normaliza el DTO del backend -> shape que usa el front
 const normalizeProfile = (d = {}) => ({

@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 //import { fetchHosts } from "@/app/lib/api";
 
-const BASE = "http://elite-lounge.us-east-2.elasticbeanstalk.com";
+const BASE = "/api";
 
 function normalizeProfile(d) {
   return {
