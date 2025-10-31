@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 //import { fetchHosts } from "@/app/lib/api";
 
-const BASE = "/api";
+const BASE = "";
 
 function normalizeProfile(d) {
   return {
