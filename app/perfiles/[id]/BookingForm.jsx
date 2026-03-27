@@ -2,6 +2,7 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { trackWhatsAppClick } from '@/app/lib/analytics';
 
 export default function BookingForm({ item }) {
   console.log("🧾 BookingForm recibió item:", item);
@@ -151,6 +152,14 @@ ${name ? '• Nombre: ' + name + '\n' : ''}${phone ? '• Tel: ' + phone + '\n' 
           href={isValid ? waHref : undefined}
           target="_blank"
           rel="noreferrer"
+          onClick={() => {
+            if (!isValid) return;
+            trackWhatsAppClick({
+              source: 'profile_booking_form',
+              phone: item?.wa ?? '+50375569960',
+              label: 'Confirmar por WhatsApp',
+            });
+          }}
           className={`inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium shadow transition border border-white/10 ${isValid ? 'bg-white text-black hover:shadow-md' : 'bg-white/10 text-zinc-400 cursor-not-allowed'}`}
         >
           {isValid ? 'Confirmar por WhatsApp' : 'Completa fecha y hora'}

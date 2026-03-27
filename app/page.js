@@ -2,6 +2,7 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import Script from "next/script";
+import { trackWhatsAppClick } from "@/app/lib/analytics";
 //import { fetchHosts } from "@/app/lib/api";
 
 const BASE = "";
@@ -71,6 +72,13 @@ export default function HomePage() {
         href={href}
         target="_blank"
         rel="noreferrer"
+        onClick={() =>
+          trackWhatsAppClick({
+            source: "home",
+            phone,
+            label,
+          })
+        }
         className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium shadow hover:shadow-md transition border border-amber-500/20 bg-amber-400/10 text-amber-300 hover:bg-amber-400/20"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
