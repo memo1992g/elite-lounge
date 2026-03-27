@@ -2,6 +2,7 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import Script from "next/script";
+import Image from "next/image";
 import { trackWhatsAppClick } from "@/app/lib/analytics";
 //import { fetchHosts } from "@/app/lib/api";
 
@@ -195,9 +196,15 @@ export default function HomePage() {
             {(items.length ? items : Array.from({ length: 8 }).map((_,i)=>({id:`skeleton-${i}`}))).map((p, idx) => (
               <div key={p.id ?? idx}
                 className="min-w-[250px] max-w-[250px] flex-shrink-0 snap-start group relative overflow-hidden rounded-3xl bg-zinc-900/60 border border-zinc-800 shadow hover:shadow-xl transition">
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-[3/4] overflow-hidden">
                   {p.photo ? (
-                    <img src={p.photo} alt={"Foto de " + p.name} className="h-full w-full object-cover transition group-hover:scale-105" loading="lazy" />
+                    <Image
+                      src={p.photo}
+                      alt={"Foto de " + p.name}
+                      fill
+                      sizes="(max-width: 768px) 250px, 250px"
+                      className="object-cover transition group-hover:scale-105"
+                    />
                   ) : (
                     <div className="h-full w-full animate-pulse bg-zinc-800" />
                   )}
@@ -212,7 +219,7 @@ export default function HomePage() {
                       <h4 className="mt-2 text-lg font-semibold text-zinc-100 flex items-center gap-2">
                         {p.name}
                         {p.countryCode && (
-                          <img src={`https://flagcdn.com/w20/${p.countryCode}.png`} alt={p.nationality} className="w-5 h-4 rounded-sm shadow" />
+                          <Image src={`https://flagcdn.com/w20/${p.countryCode}.png`} alt={p.nationality || "Bandera"} width={20} height={14} className="w-5 h-4 rounded-sm shadow" />
                         )}
                       </h4>
                       <p className="text-sm text-zinc-400">{p.role}</p>
@@ -275,8 +282,14 @@ export default function HomePage() {
             "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=1200&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?q=80&w=1200&auto=format&fit=crop",
           ].map((src, i) => (
-            <div key={i} className="aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-800">
-              <img src={src} alt={"Ambiente " + (i + 1)} className="h-full w-full object-cover" loading="lazy" />
+            <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-800">
+              <Image
+                src={src}
+                alt={"Ambiente " + (i + 1)}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+              />
             </div>
           ))}
         </div>
@@ -295,11 +308,13 @@ export default function HomePage() {
               <a href="#contacto" className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-zinc-200 hover:bg-white/5">Ver contacto</a>
             </div>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-zinc-800">
-            <img
+          <div className="relative min-h-[280px] rounded-2xl overflow-hidden border border-zinc-800">
+            <Image
               src="https://images.unsplash.com/photo-1542089363-456b05e72c33?q=80&w=1600&auto=format&fit=crop"
               alt="Salón privado"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
           </div>
         </div>
@@ -350,11 +365,13 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <div className="rounded-3xl overflow-hidden border border-zinc-800">
-            <img
+          <div className="relative min-h-[300px] rounded-3xl overflow-hidden border border-zinc-800">
+            <Image
               src="https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=1600&auto=format&fit=crop"
               alt="Detalle de ambiente"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
           </div>
         </div>
