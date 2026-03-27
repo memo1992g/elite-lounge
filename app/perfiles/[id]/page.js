@@ -7,6 +7,43 @@ import { fetchHostWithPhotosByCode } from "@/app/lib/api";
 
 export const revalidate = 0;
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+
+  try {
+    const item = await fetchHostWithPhotosByCode(id);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv";
+    const title = `${item.name} | Compañía VIP en El Salvador | Premium companionship`;
+    const description = `${item.name} ${item.role ? `- ${item.role}. ` : ""}Reserva compañía VIP en San Salvador con atención discreta. English-friendly service for international guests 35+.`;
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: `/perfiles/${item.code ?? id}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `${siteUrl}/perfiles/${item.code ?? id}`,
+        images: item.photo ? [{ url: item.photo, alt: `Perfil de ${item.name}` }] : [],
+      },
+      keywords: [
+        `${item.name} compañía`,
+        `premium companionship ${item.name}`,
+        "compañía san salvador",
+        "companionship el salvador",
+        "english speaking companion",
+      ],
+    };
+  } catch {
+    return {
+      title: "Perfil | Elite Lounge",
+      robots: { index: false, follow: false },
+    };
+  }
+}
+
 export default async function ProfilePage({ params }) {
   const { id } = await params; // ✅ necesario en Next.js 15
 
@@ -17,7 +54,6 @@ export default async function ProfilePage({ params }) {
     notFound();
   }
   if (!item) notFound();
-
 
   const photos = (item.photos ?? []).filter(Boolean);
   const languages = item.languages ?? [];
