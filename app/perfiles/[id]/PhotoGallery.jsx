@@ -1,4 +1,5 @@
 'use client';
+import Image from "next/image";
 import { useState } from "react";
 
 export default function PhotoGallery({ photos, alt }) {
@@ -32,7 +33,7 @@ export default function PhotoGallery({ photos, alt }) {
               i === active ? "border-amber-400" : "border-zinc-700"
             }`}
           >
-            <img
+            <Image
               src={src}
               alt={`${alt} ${i + 1}`}
               className="h-full w-full object-cover"
