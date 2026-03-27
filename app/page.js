@@ -198,12 +198,11 @@ export default function HomePage() {
                 className="min-w-[250px] max-w-[250px] flex-shrink-0 snap-start group relative overflow-hidden rounded-3xl bg-zinc-900/60 border border-zinc-800 shadow hover:shadow-xl transition">
                 <div className="relative aspect-[3/4] overflow-hidden">
                   {p.photo ? (
-                    <Image
+                    <img
                       src={p.photo}
                       alt={"Foto de " + p.name}
-                      fill
-                      sizes="(max-width: 768px) 250px, 250px"
-                      className="object-cover transition group-hover:scale-105"
+                      className="h-full w-full object-cover transition group-hover:scale-105"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="h-full w-full animate-pulse bg-zinc-800" />

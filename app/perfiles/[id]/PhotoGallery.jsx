@@ -16,12 +16,11 @@ export default function PhotoGallery({ photos, alt }) {
   return (
     <div className="space-y-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-zinc-800">
-        <Image
+        <img
           src={photos[active]}
           alt={alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
+          className="h-full w-full object-cover"
+          loading="lazy"
         />
       </div>
 
@@ -37,9 +36,8 @@ export default function PhotoGallery({ photos, alt }) {
             <Image
               src={src}
               alt={`${alt} ${i + 1}`}
-              fill
-              sizes="(max-width: 768px) 25vw, 120px"
-              className="object-cover"
+              className="h-full w-full object-cover"
+              loading="lazy"
             />
           </button>
         ))}
