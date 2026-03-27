@@ -1,6 +1,7 @@
 
 "use client";
 import { useRef, useEffect, useState } from "react";
+import Script from "next/script";
 //import { fetchHosts } from "@/app/lib/api";
 
 const BASE = "";
@@ -65,7 +66,7 @@ export default function HomePage() {
       "https://wa.me/" +
       phone.replace(/\D/g, "") +
       (message ? "?text=" + encodeURIComponent(message) : "");
-    return (
+  return (
       <a
         href={href}
         target="_blank"
@@ -80,8 +81,30 @@ export default function HomePage() {
     );
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Elite Lounge",
+    description:
+      "Servicio de compañía VIP en San Salvador con reservas privadas y atención discreta.",
+    areaServed: "El Salvador",
+    telephone: "+50375569960",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "San Salvador",
+      addressCountry: "SV",
+    },
+    sameAs: ["https://wa.me/50375569960"],
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv",
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-zinc-100">
+      <Script
+        id="ld-json-home"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-zinc-900/80 bg-black/70 backdrop-blur supports-[backdrop-filter]:bg-black/40">
         <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">

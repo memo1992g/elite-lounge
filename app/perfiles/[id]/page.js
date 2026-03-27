@@ -7,6 +7,42 @@ import { fetchHostWithPhotosByCode } from "@/app/lib/api";
 
 export const revalidate = 0;
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+
+  try {
+    const item = await fetchHostWithPhotosByCode(id);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv";
+    const title = `${item.name} | Escort y compañía VIP en El Salvador`;
+    const description = `${item.name} ${item.role ? `- ${item.role}. ` : ""}Reserva compañía VIP en San Salvador con atención discreta y confirmación por WhatsApp.`;
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: `/perfiles/${item.code ?? id}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `${siteUrl}/perfiles/${item.code ?? id}`,
+        images: item.photo ? [{ url: item.photo, alt: `Perfil de ${item.name}` }] : [],
+      },
+      keywords: [
+        `escort ${item.name}`,
+        "escort el salvador",
+        "compañía san salvador",
+        "compañía vip",
+      ],
+    };
+  } catch {
+    return {
+      title: "Perfil | Elite Lounge",
+      robots: { index: false, follow: false },
+    };
+  }
+}
+
 export default async function ProfilePage({ params }) {
   const { id } = await params; // ✅ necesario en Next.js 15
 
@@ -17,7 +53,6 @@ export default async function ProfilePage({ params }) {
     notFound();
   }
   if (!item) notFound();
-
 
   const photos = (item.photos ?? []).filter(Boolean);
   const languages = item.languages ?? [];
