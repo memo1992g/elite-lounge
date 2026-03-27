@@ -16,37 +16,45 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv";
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Elite Lounge | Escorts en El Salvador y compañía VIP",
+    default:
+      "Elite Lounge | Compañía VIP en El Salvador | Premium companionship",
     template: "%s | Elite Lounge",
   },
   description:
-    "Elite Lounge: escorts en El Salvador, compañía VIP y experiencias privadas con reserva discreta por WhatsApp en San Salvador.",
+    "Elite Lounge ofrece compañía VIP en El Salvador y premium companionship para visitantes internacionales. Atención discreta en San Salvador para adultos 35+.",
   keywords: [
-    "escort el salvador",
-    "escorts en el salvador",
-    "scort el salvador",
     "compañía el salvador",
     "compañía vip san salvador",
-    "reservas privadas el salvador",
+    "escorts en el salvador",
+    "scort el salvador",
+    "companionship el salvador",
+    "premium companionship san salvador",
+    "english speaking companion el salvador",
+    "vip company for travelers",
     "elite lounge",
   ],
   alternates: {
     canonical: "/",
+    languages: {
+      "es-SV": "/",
+      "en-US": "/",
+    },
   },
   openGraph: {
     type: "website",
     locale: "es_SV",
+    alternateLocale: "en_US",
     url: SITE_URL,
     siteName: "Elite Lounge",
-    title: "Elite Lounge | Escorts en El Salvador y compañía VIP",
+    title: "Elite Lounge | Compañía VIP en El Salvador | Premium companionship",
     description:
-      "Servicio premium de compañía en San Salvador. Perfiles verificados, atención personalizada y reservas discretas.",
+      "Private, discreet and premium companionship in San Salvador for local and international guests aged 35+.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Elite Lounge | Escorts en El Salvador y compañía VIP",
+    title: "Elite Lounge | Premium companionship in El Salvador",
     description:
-      "Reserva compañía VIP en El Salvador con atención discreta por WhatsApp.",
+      "Bilingual VIP companionship in San Salvador. Discreet booking for international guests 35+.",
   },
   robots: {
     index: true,

@@ -13,8 +13,8 @@ export async function generateMetadata({ params }) {
   try {
     const item = await fetchHostWithPhotosByCode(id);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv";
-    const title = `${item.name} | Escort y compañía VIP en El Salvador`;
-    const description = `${item.name} ${item.role ? `- ${item.role}. ` : ""}Reserva compañía VIP en San Salvador con atención discreta y confirmación por WhatsApp.`;
+    const title = `${item.name} | Compañía VIP en El Salvador | Premium companionship`;
+    const description = `${item.name} ${item.role ? `- ${item.role}. ` : ""}Reserva compañía VIP en San Salvador con atención discreta. English-friendly service for international guests 35+.`;
 
     return {
       title,
@@ -29,10 +29,11 @@ export async function generateMetadata({ params }) {
         images: item.photo ? [{ url: item.photo, alt: `Perfil de ${item.name}` }] : [],
       },
       keywords: [
-        `escort ${item.name}`,
-        "escort el salvador",
+        `${item.name} compañía`,
+        `premium companionship ${item.name}`,
         "compañía san salvador",
-        "compañía vip",
+        "companionship el salvador",
+        "english speaking companion",
       ],
     };
   } catch {
