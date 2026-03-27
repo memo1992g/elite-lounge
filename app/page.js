@@ -1,6 +1,7 @@
 
 "use client";
 import { useRef, useEffect, useState } from "react";
+import Script from "next/script";
 //import { fetchHosts } from "@/app/lib/api";
 
 const BASE = "";
@@ -65,7 +66,7 @@ export default function HomePage() {
       "https://wa.me/" +
       phone.replace(/\D/g, "") +
       (message ? "?text=" + encodeURIComponent(message) : "");
-    return (
+  return (
       <a
         href={href}
         target="_blank"
@@ -80,8 +81,71 @@ export default function HomePage() {
     );
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Elite Lounge",
+    description:
+      "Servicio de compañía VIP en San Salvador con reservas privadas y atención discreta.",
+    areaServed: "El Salvador",
+    telephone: "+50375569960",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "San Salvador",
+      addressCountry: "SV",
+    },
+    sameAs: ["https://wa.me/50375569960"],
+    availableLanguage: ["es", "en"],
+    audience: {
+      "@type": "PeopleAudience",
+      suggestedMinAge: 35,
+    },
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv",
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "¿Atienden clientes extranjeros en San Salvador?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Sí. Brindamos atención bilingüe (español/inglés) para visitantes internacionales con reservas privadas y discretas.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you provide premium companionship for international travelers?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. We offer premium companionship in San Salvador focused on privacy, comfort and personalized coordination.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿Para qué perfil de cliente está pensado el servicio?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Nuestro servicio está orientado a adultos que buscan un entorno premium y discreto, especialmente profesionales y viajeros de 35 años en adelante.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-zinc-100">
+      <Script
+        id="ld-json-home"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="ld-json-faq"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-zinc-900/80 bg-black/70 backdrop-blur supports-[backdrop-filter]:bg-black/40">
         <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
@@ -229,6 +293,28 @@ export default function HomePage() {
               alt="Salón privado"
               className="h-full w-full object-cover"
             />
+          </div>
+        </div>
+      </section>
+
+
+      {/* International / 35+ */}
+      <section id="internacional" className="mx-auto max-w-7xl px-4 pb-12 md:pb-16">
+        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 md:p-10">
+          <h3 className="text-2xl md:text-3xl font-bold">Compañía VIP para clientes internacionales (35+)</h3>
+          <p className="mt-3 text-zinc-300 max-w-3xl">
+            Servicio premium orientado a visitantes extranjeros, ejecutivos y viajeros frecuentes que buscan
+            discreción, buen gusto y coordinación privada en San Salvador.
+          </p>
+          <p className="mt-4 text-zinc-300 max-w-3xl">
+            <span className="font-semibold text-zinc-100">English:</span> Premium companionship in El Salvador
+            tailored for international guests aged 35+, with bilingual communication and discreet booking.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="#perfiles" className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-zinc-200 hover:bg-white/5">
+              Ver perfiles disponibles
+            </a>
+            <WABtn label="Book by WhatsApp" message="Hello, I need premium companionship in San Salvador. Could you share availability?" />
           </div>
         </div>
       </section>
