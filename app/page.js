@@ -1,6 +1,9 @@
 
 "use client";
 import { useRef, useEffect, useState } from "react";
+import Script from "next/script";
+import Image from "next/image";
+import { trackWhatsAppClick } from "@/app/lib/analytics";
 //import { fetchHosts } from "@/app/lib/api";
 
 const BASE = "";
@@ -65,11 +68,18 @@ export default function HomePage() {
       "https://wa.me/" +
       phone.replace(/\D/g, "") +
       (message ? "?text=" + encodeURIComponent(message) : "");
-    return (
+  return (
       <a
         href={href}
         target="_blank"
         rel="noreferrer"
+        onClick={() =>
+          trackWhatsAppClick({
+            source: "home",
+            phone,
+            label,
+          })
+        }
         className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium shadow hover:shadow-md transition border border-amber-500/20 bg-amber-400/10 text-amber-300 hover:bg-amber-400/20"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
@@ -80,8 +90,71 @@ export default function HomePage() {
     );
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Elite Lounge",
+    description:
+      "Servicio de compañía VIP en San Salvador con reservas privadas y atención discreta.",
+    areaServed: "El Salvador",
+    telephone: "+50375569960",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "San Salvador",
+      addressCountry: "SV",
+    },
+    sameAs: ["https://wa.me/50375569960"],
+    availableLanguage: ["es", "en"],
+    audience: {
+      "@type": "PeopleAudience",
+      suggestedMinAge: 35,
+    },
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://elite-lounge.sv",
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "¿Atienden clientes extranjeros en San Salvador?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Sí. Brindamos atención bilingüe (español/inglés) para visitantes internacionales con reservas privadas y discretas.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you provide premium companionship for international travelers?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. We offer premium companionship in San Salvador focused on privacy, comfort and personalized coordination.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿Para qué perfil de cliente está pensado el servicio?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Nuestro servicio está orientado a adultos que buscan un entorno premium y discreto, especialmente profesionales y viajeros de 35 años en adelante.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-zinc-100">
+      <Script
+        id="ld-json-home"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="ld-json-faq"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-zinc-900/80 bg-black/70 backdrop-blur supports-[backdrop-filter]:bg-black/40">
         <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
@@ -123,9 +196,15 @@ export default function HomePage() {
             {(items.length ? items : Array.from({ length: 8 }).map((_,i)=>({id:`skeleton-${i}`}))).map((p, idx) => (
               <div key={p.id ?? idx}
                 className="min-w-[250px] max-w-[250px] flex-shrink-0 snap-start group relative overflow-hidden rounded-3xl bg-zinc-900/60 border border-zinc-800 shadow hover:shadow-xl transition">
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-[3/4] overflow-hidden">
                   {p.photo ? (
-                    <img src={p.photo} alt={"Foto de " + p.name} className="h-full w-full object-cover transition group-hover:scale-105" loading="lazy" />
+                    <Image
+                      src={p.photo}
+                      alt={"Foto de " + p.name}
+                      fill
+                      sizes="(max-width: 768px) 250px, 250px"
+                      className="object-cover transition group-hover:scale-105"
+                    />
                   ) : (
                     <div className="h-full w-full animate-pulse bg-zinc-800" />
                   )}
@@ -140,7 +219,7 @@ export default function HomePage() {
                       <h4 className="mt-2 text-lg font-semibold text-zinc-100 flex items-center gap-2">
                         {p.name}
                         {p.countryCode && (
-                          <img src={`https://flagcdn.com/w20/${p.countryCode}.png`} alt={p.nationality} className="w-5 h-4 rounded-sm shadow" />
+                          <Image src={`https://flagcdn.com/w20/${p.countryCode}.png`} alt={p.nationality || "Bandera"} width={20} height={14} className="w-5 h-4 rounded-sm shadow" />
                         )}
                       </h4>
                       <p className="text-sm text-zinc-400">{p.role}</p>
@@ -203,8 +282,14 @@ export default function HomePage() {
             "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=1200&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?q=80&w=1200&auto=format&fit=crop",
           ].map((src, i) => (
-            <div key={i} className="aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-800">
-              <img src={src} alt={"Ambiente " + (i + 1)} className="h-full w-full object-cover" loading="lazy" />
+            <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-800">
+              <Image
+                src={src}
+                alt={"Ambiente " + (i + 1)}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover"
+              />
             </div>
           ))}
         </div>
@@ -223,12 +308,36 @@ export default function HomePage() {
               <a href="#contacto" className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-zinc-200 hover:bg-white/5">Ver contacto</a>
             </div>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-zinc-800">
-            <img
+          <div className="relative min-h-[280px] rounded-2xl overflow-hidden border border-zinc-800">
+            <Image
               src="https://images.unsplash.com/photo-1542089363-456b05e72c33?q=80&w=1600&auto=format&fit=crop"
               alt="Salón privado"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
+          </div>
+        </div>
+      </section>
+
+
+      {/* International / 35+ */}
+      <section id="internacional" className="mx-auto max-w-7xl px-4 pb-12 md:pb-16">
+        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-6 md:p-10">
+          <h3 className="text-2xl md:text-3xl font-bold">Compañía VIP para clientes internacionales (35+)</h3>
+          <p className="mt-3 text-zinc-300 max-w-3xl">
+            Servicio premium orientado a visitantes extranjeros, ejecutivos y viajeros frecuentes que buscan
+            discreción, buen gusto y coordinación privada en San Salvador.
+          </p>
+          <p className="mt-4 text-zinc-300 max-w-3xl">
+            <span className="font-semibold text-zinc-100">English:</span> Premium companionship in El Salvador
+            tailored for international guests aged 35+, with bilingual communication and discreet booking.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="#perfiles" className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-medium text-zinc-200 hover:bg-white/5">
+              Ver perfiles disponibles
+            </a>
+            <WABtn label="Book by WhatsApp" message="Hello, I need premium companionship in San Salvador. Could you share availability?" />
           </div>
         </div>
       </section>
@@ -256,11 +365,13 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <div className="rounded-3xl overflow-hidden border border-zinc-800">
-            <img
+          <div className="relative min-h-[300px] rounded-3xl overflow-hidden border border-zinc-800">
+            <Image
               src="https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=1600&auto=format&fit=crop"
               alt="Detalle de ambiente"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
           </div>
         </div>
